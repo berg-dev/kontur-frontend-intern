@@ -20,9 +20,25 @@ class List {
     }, []);
   }
 
-  getImportant() {
+  getImportantList() {
     return this.list.reduce((acc, comment) => {
       if (comment.isImportant) {
+        return [...acc, comment];
+      }
+
+      return acc;
+    }, []);
+  }
+
+  getList() {
+    return this.list;
+  }
+
+  getListByUser(commandUser) {
+    return this.list.reduce((acc, comment) => {
+      const commentUser = comment.user.substring(0, commandUser.length);
+
+      if(commandUser.toLowerCase() === commentUser.toLowerCase()) {
         return [...acc, comment];
       }
 

@@ -24,21 +24,31 @@ function getFiles() {
 
 function processCommand(commentsList) {
   return (command) => {
-    switch (command) {
-      case 'exit':
+    switch (true) {
+      case /exit/.test(command):
         process.exit(0);
         break;
 
-      case 'show': {
-        const list = commentsList.list;
+      case /show/.test(command): {
+        const list = commentsList.getList();
         const output = new Output(list);
         output.show();
         break;
       }
 
-      case 'important': {
-        const importantList = commentsList.getImportant();
+      case /important/.test(command): {
+        const importantList = commentsList.getImportantList();
         const output = new Output(importantList);
+        output.show();
+        break;
+      }
+
+      case /user/.test(command): {
+        const re = /(?:user )(.*)/g;
+        const match = re.exec(command);
+        const userName = match[1];
+        const listByUser = commentsList.getListByUser(userName);
+        const output = new Output(listByUser);
         output.show();
         break;
       }
