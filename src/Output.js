@@ -1,14 +1,8 @@
-const testData = [
-  ['  !  ', '  user  ', '  date        ', '  comment                ', '  fileName  '],
-  ['-----', '--------', '--------------', '-------------------------', '------------'],
-  ['     ', '  digi  ', '  2016-04-08  ', '  добавить writeLine!!!  ', '  index.js  '],
-];
-
 class Output {
   constructor(list = []) {
     this.list = list;
     this.cellsMaxLength = [1, 10, 10, 50, 15];
-    this.cellsMinLength = [0, 0, 0, 0, 0];
+    this.cellsMinLength = [1, 4, 4, 7, 8];
   }
 
   show() {
