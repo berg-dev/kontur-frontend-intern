@@ -21,13 +21,9 @@ class List {
   }
 
   getImportantList() {
-    return this.list.reduce((acc, comment) => {
-      if (comment.isImportant) {
-        return [...acc, comment];
-      }
-
-      return acc;
-    }, []);
+    return this.filterList((comment) => {
+      return comment.isImportant;
+    });
   }
 
   getList() {
@@ -35,15 +31,14 @@ class List {
   }
 
   getListByUser(commandUser) {
-    return this.list.reduce((acc, comment) => {
+    return this.filterList((comment) => {
       const commentUser = comment.user.substring(0, commandUser.length);
+      return commandUser.toLowerCase() === commentUser.toLowerCase();
+    })
+  }
 
-      if(commandUser.toLowerCase() === commentUser.toLowerCase()) {
-        return [...acc, comment];
-      }
-
-      return acc;
-    }, []);
+  filterList(cb) {
+    return this.list.filter((comment) => cb(comment));
   }
 }
 
