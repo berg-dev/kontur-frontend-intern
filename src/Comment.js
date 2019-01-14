@@ -5,6 +5,7 @@ class Comment {
     this.date = '';
     this.text = '';
     this.isImportant = false;
+    this.importantWeight = 0;
     this.matchData(comment);
   }
 
@@ -16,6 +17,7 @@ class Comment {
     this.date = match[2] || this.date;
     this.text = match[3] || this.text;
     this.isImportant = this.text.indexOf('!') >= 0;
+    this.importantWeight = this.text.split('').filter(char => char === '!').length;
   }
 }
 
