@@ -1,29 +1,28 @@
 class Output {
-  constructor(list = []) {
-    this.list = list;
+  constructor() {
+    this.data = [];
     this.cellsMaxLength = [1, 10, 10, 50, 15];
     this.cellsMinLength = [1, 4, 4, 7, 8];
   }
 
-  show() {
-    const data = this.createData(this.list);
-    console.log(this.formatedOutput(data));
+  print() {
+    console.log(Output.formattedOutput(this.data));
   }
 
-  formatedOutput(data) {
+  static formattedOutput(data) {
     return data.reduce((acc, row) => {
       return `${acc}
 ${row.join('|')}`;
     }, ``);
   }
 
-  createData(list) {
+  updateData(list) {
     let listing = this.createListing(list);
     const header = this.createHeader(listing);
     const separator = [this.createSeparator(header.join('|').length, '-')];
     listing = this.createListing(list);
 
-    return listing.length > 0
+    this.data = listing.length > 0
       ? [ header, separator, ...listing, separator ]
       : [ header, separator, ...listing ];
   }
@@ -93,4 +92,3 @@ ${row.join('|')}`;
 }
 
 module.exports = Output;
-

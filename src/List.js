@@ -1,50 +1,50 @@
 const Comment = require('./Comment');
 
 class List {
-  constructor(files = []) {
-    this.collection = this.createCommentsCollection(files);
-    this.list = this.createCommentsList(this.collection);
+  constructor(files) {
+    this.list = this.getComments(files);
   }
 
-  createCommentsCollection(files = []) {
+  getComments(files) {
+    const regex = /(\/\/ ?todo[ ]?[:]?[ ]?)(.*)/gi;
     return files.reduce((acc, file) => {
-      const comments = file.content.match(/(\/\/ ?[tT][oO][dD][oO][ |:]).*/g);
+      const commentsInFile = file.content.match(regex);
 
-      if(!comments.length) return acc;
+      if (commentsInFile && commentsInFile.length) {
+        const comments = commentsInFile.map(comment => {
+          return new Comment(comment, file.fileName);
+        });
 
-      return [...acc, {fileName: file.fileName, comments}];
-    }, []);
-  }
-
-  createCommentsList(collection = []) {
-    return collection.reduce((acc, file) => {
-      if(!file.comments.length) {
-        return acc;
+        return [...acc, ...comments];
       }
 
-      return [...acc, ...file.comments.map(comment => new Comment(comment, file.fileName))];
+      return acc;
     }, []);
   }
 
-  getImportantList() {
-    return this.filterList((comment) => {
-      return comment.isImportant;
-    });
+  getList(type, params) {
+    switch(type) {
+      case 'important':
+        return this.filterList(comment => comment.isImportant);
+
+      case 'user': {
+        return this.filterList((comment) => {
+          const commentUser = comment.user.substring(0, params.user.length);
+          return params.user.toLowerCase() === commentUser.toLowerCase();
+        })
+      }
+
+      case 'sort': {
+        return this.getSortList(params.sortType);
+      }
+
+      default:
+        return this.list;
+    }
   }
 
-  getList() {
-    return this.list;
-  }
-
-  getListByUser(commandUser) {
-    return this.filterList((comment) => {
-      const commentUser = comment.user.substring(0, commandUser.length);
-      return commandUser.toLowerCase() === commentUser.toLowerCase();
-    })
-  }
-
-  filterList(cb) {
-    return this.list.filter((comment) => cb(comment));
+  filterList(f) {
+    return this.list.filter((comment) => f(comment));
   }
 
   getSortList(type) {
