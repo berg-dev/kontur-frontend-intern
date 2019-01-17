@@ -28,7 +28,7 @@ class List {
         return this.filterList(comment => comment.isImportant);
 
       case 'user': {
-        return this.filterList((comment) => {
+        return this.filterList(comment => {
           const commentUser = comment.user.substring(0, params.user.length);
           return params.user.toLowerCase() === commentUser.toLowerCase();
         })
@@ -36,6 +36,21 @@ class List {
 
       case 'sort': {
         return this.getSortList(params.sortType);
+      }
+
+      case 'date': {
+        const [year = '1970', month = '1', day = '1'] = params.date.split('-');
+        const commandDate = new Date(year, month, day);
+        const commandParseDate = Date.parse(commandDate);
+
+        return this.filterList(comment => {
+          if(!comment.date) return false;
+          const [cYear = '1970', cMonth = '1', cDay = '1'] = comment.date.split('-');
+          const commentDate = new Date(cYear, cMonth, cDay);
+          const commentParseDate = Date.parse(commentDate);
+
+          return commentParseDate >= commandParseDate;
+        });
       }
 
       default:

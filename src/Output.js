@@ -6,14 +6,11 @@ class Output {
   }
 
   print() {
-    console.log(Output.formattedOutput(this.data));
+    console.log(this.formattedOutput(this.data));
   }
 
-  static formattedOutput(data) {
-    return data.reduce((acc, row) => {
-      return `${acc}
-${row.join('|')}`;
-    }, ``);
+  formattedOutput(data) {
+    return data.map(row => row.join('|')).join('\n');
   }
 
   updateData(list) {
