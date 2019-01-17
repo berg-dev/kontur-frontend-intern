@@ -77,6 +77,18 @@ function processCommand(commentsList) {
         break;
       }
 
+      case 'date': {
+        if(!arg) {
+          console.log('Error: date required');
+          break;
+        }
+
+        const list = commentsList.getList('date', { date: arg });
+        output.updateData(list);
+        output.print();
+        break;
+      }
+
       default:
         console.log('wrong command');
         break;
